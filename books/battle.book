@@ -1,0 +1,18 @@
+__TYPE__:Event
+
+-------------
+#NARRATION
+Voce se aproxima de forma rapida e acerta com um golpe no %s
+Voce consegue acertar o estomago do %s
+
+#STATUS
+sucess
+
+-------------
+#NARRATION
+Quase que voce consegue acertar, na hora que lança o golpe o %s consegue desviar
+Voce foi lento demais, quando se preparava para atacar o %s leu sua intenção e conseguiu desviar
+Por estinto o %s consegue desviar
+
+#STATUS
+fail

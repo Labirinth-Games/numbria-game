@@ -1,0 +1,66 @@
+__TYPE__:Player
+
+---------------
+#ASK
+ando para o norte
+ando para o sul
+ando para o leste
+ando para o oeste
+caminho
+
+#ANSWER
+Você caminha para o %s.
+Você esta indo para o %s.
+
+#ACTION
+Walk
+
+#PRIORITY
+1
+
+-----------------
+#ASK
+onde estou 
+o que tem a minha volta 
+para onde estou olhando
+olho a minha volta
+olho em volta
+
+#ANSWER
+A sua volta está cheia de %s
+Você está olhando para %s
+Sei lá mano, parece que você está em uma %s
+
+#ACTION
+WhereIAm
+
+-----------------
+#ASK 
+vou andar por ai
+vou andar
+sei não
+sei lá
+estou perdido
+para onde posso ir
+
+#ANSWER
+Para onde? me descreva qual direção: norte, sul, leste, oeste
+Que tal ir para o norte?
+Que tal ir para o sul?
+Que tal ir para o leste?
+
+-----------------
+
+#ASK
+oi
+Ola
+opa
+como vai
+
+#ANSWER
+Opa, tudo bem e por ai? só toma cuidado para não se distrair e ser atacado
+Oi, tudo bem mercenário.
+kkkkkk, cuida da sua vida.
+
+#ACTION
+Event

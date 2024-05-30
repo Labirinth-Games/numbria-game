@@ -1,0 +1,23 @@
+__TYPE__:Lore
+
+------------------
+#INDEX
+001
+
+#CONTENT
+Você é um mercenário que aceitou pegar o cantrato mais desafiante de todos onde ninguem na sua cidade sonhava em pegar
+Esse contrato era completamente desafiador e considerado por muitos uma sentença de morte!
+Mas destemido e cego pela montanha de ouro, fama e quantidade inimaginavel de espolios voce se jogou na missão.
+
+#GOTO
+002
+
+------------------
+#INDEX
+002
+
+#CONTENT
+Voce está numa floresta, ansioso para poder conquistar seu premio logo se apressou em se aventurar.
+
+#SYSTEM
+O que voce faz?
