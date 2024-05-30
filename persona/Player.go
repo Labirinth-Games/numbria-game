@@ -1,4 +1,4 @@
-package entities
+package persona
 
 import (
 	"fmt"
@@ -6,19 +6,20 @@ import (
 	"strings"
 
 	"github.com/Joeverson/numbria-game/core"
+	"github.com/Joeverson/numbria-game/game"
 	"github.com/Joeverson/numbria-game/model"
 	"github.com/Joeverson/numbria-game/utils"
 )
 
 type Player struct {
-	World      World
+	World      game.World
 	book       core.Books
 	Dictionary []model.Dictionary
 	x          int
 	y          int
 }
 
-func (p *Player) Load(world World, book core.Books) {
+func (p *Player) Load(world game.World, book core.Books) {
 
 	p.Dictionary = book.Player.ToPlayer()
 	p.World = world
@@ -26,12 +27,12 @@ func (p *Player) Load(world World, book core.Books) {
 }
 
 func (player *Player) Spawn() {
-	player.x = rand.IntN(player.World.width-2) + 2
-	player.y = rand.IntN(player.World.height-2) + 2
+	player.x = rand.IntN(player.World.Width-2) + 2
+	player.y = rand.IntN(player.World.Height-2) + 2
 }
 
 func (p Player) getPlaceName() string {
-	return p.World.area[p.x][p.y].name
+	return p.World.GetNameZone(p.x, p.y)
 }
 
 func (p *Player) move(direction string) {

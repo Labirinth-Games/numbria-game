@@ -6,8 +6,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/Joeverson/numbria-game/controller"
 	"github.com/Joeverson/numbria-game/core"
-	"github.com/Joeverson/numbria-game/entities"
+	"github.com/Joeverson/numbria-game/game"
+	"github.com/Joeverson/numbria-game/persona"
 	"github.com/Joeverson/numbria-game/utils"
 )
 
@@ -55,22 +57,18 @@ const logo = `
 
 `
 
-type Game struct {
-	Context interface{}
-}
-
 func main() {
 	// loaders
 
 	reader := bufio.NewReader(os.Stdin)
 
-	world := entities.World{}
+	world := game.World{}
 	world.MapGenerate()
 
 	books := core.Books{}
 	books.Load()
 
-	player := entities.Player{}
+	player := persona.Player{}
 	player.Load(world, books)
 	player.Spawn()
 
@@ -79,7 +77,7 @@ func main() {
 	fmt.Print(logo)
 	// time.Sleep(3 * time.Second)
 
-	storytelling := entities.StoryTelling{Current: 0, Book: books}
+	storytelling := controller.StoryTelling{Current: 0, Book: books}
 
 	storytelling.Execute()
 

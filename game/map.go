@@ -1,4 +1,4 @@
-package entities
+package game
 
 import (
 	"github.com/Joeverson/numbria-game/utils"
@@ -16,9 +16,9 @@ const (
 )
 
 type World struct {
+	Width  int
+	Height int
 	area   [][]MapZone
-	width  int
-	height int
 }
 
 type MapZone struct {
@@ -29,11 +29,15 @@ type MapZone struct {
 	isEndMap bool
 }
 
+func (w World) GetNameZone(x, y int) string {
+	return w.area[x][y].name
+}
+
 func (world *World) MapGenerate() {
 	width, height, pixels := utils.LoadImageTemplate()
 
-	world.height = height
-	world.width = width
+	world.Height = height
+	world.Width = width
 
 	for y := 0; y < height; y++ {
 		var zone []MapZone
