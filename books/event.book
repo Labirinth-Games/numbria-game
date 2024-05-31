@@ -8,6 +8,9 @@ Por um breve momento ela parece se esconder.
 #SYSTEM
 O que voce faz?
 
+#EVENT_TYPE
+creature
+
 #ATTACK
 BATTLE002
 

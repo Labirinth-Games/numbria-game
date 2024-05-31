@@ -1,8 +1,6 @@
 package core
 
 import (
-	"bufio"
-	"os"
 	"strconv"
 	"strings"
 
@@ -20,9 +18,9 @@ const (
 
 type Books struct {
 	Lore     BookConfig
-	Event    BookConfig
 	Battle   BookConfig
 	Ambience Ambience
+	Event    Event
 	Player   BookConfig
 }
 
@@ -32,80 +30,15 @@ type BookConfig struct {
 }
 
 func (book *Books) Load() {
-	loreBook := ReadFileToStringList(LORE_BOOK)
-	eventBook := ReadFileToStringList(EVENT_BOOK)
-	battleBook := ReadFileToStringList(BATTLE_BOOK)
-	ambienceBook := ReadFileToStringList(AMBIENCE_BOOK)
-	playerBook := ReadFileToStringList(PLAYER_BOOK)
+	book.Lore = BookConfig(utils.Interpreter(LORE_BOOK))
+	book.Battle = BookConfig(utils.Interpreter(BATTLE_BOOK))
+	book.Player = BookConfig(utils.Interpreter(PLAYER_BOOK))
 
-	book.Lore.Interpreter(loreBook)
-	book.Event.Interpreter(eventBook)
-	book.Battle.Interpreter(battleBook)
-	book.Player.Interpreter(playerBook)
-
-	ambience := BookConfig{}
-	ambience.Interpreter(ambienceBook)
+	ambience := BookConfig(utils.Interpreter(AMBIENCE_BOOK))
 	book.Ambience = Ambience{Models: ambience.ToAmbience()}
-}
 
-func ReadFileToStringList(path string) []string {
-	file, err := os.Open(path)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer file.Close()
-
-	fileScanner := bufio.NewScanner(file)
-	fileScanner.Split(bufio.ScanLines)
-
-	var lines []string
-
-	for fileScanner.Scan() {
-		lines = append(lines, fileScanner.Text())
-	}
-
-	return lines
-}
-
-func (b *BookConfig) Interpreter(lines []string) {
-	interpretMap := make(map[int]map[string][]string)
-	var currentLabel int
-	var subCurrentLabel string
-	var bookType string
-	var i int = 0
-
-	for _, line := range lines {
-		if line == "" {
-			continue
-		}
-
-		if strings.Contains(line, "__TYPE__:") {
-			bookType = line[len("__TYPE__:"):]
-
-			continue
-		}
-
-		if strings.Contains(line, "----------") {
-			currentLabel = i
-			i++
-
-			interpretMap[currentLabel] = map[string][]string{}
-			continue
-		}
-
-		if len(line) > 1 && line[:1] == "#" {
-			subCurrentLabel = line
-			interpretMap[currentLabel][subCurrentLabel] = []string{}
-			continue
-		}
-
-		interpretMap[currentLabel][subCurrentLabel] = append(interpretMap[currentLabel][subCurrentLabel], line)
-	}
-
-	b.Contents = interpretMap
-	b.Type = bookType
+	event := BookConfig(utils.Interpreter(EVENT_BOOK))
+	book.Event = Event{Models: event.ToEvent()}
 }
 
 func (b BookConfig) ToPlayer() []model.Dictionary {
@@ -161,4 +94,22 @@ func (b BookConfig) ToAmbience() []model.AmbienceModel {
 	}
 
 	return ambience
+}
+
+func (b BookConfig) ToEvent() []model.EventModel {
+	event := []model.EventModel{}
+
+	for _, item := range b.Contents {
+		newEvent := model.EventModel{
+			Contents:        item["#CONTENT"],
+			System:          item["#SYSTEM"][0],
+			EventTypeString: item["#EVENT_TYPE"][0],
+			Type:            b.Type,
+		}
+		newEvent.PopulateEventType()
+
+		event = append(event, newEvent)
+	}
+
+	return event
 }

@@ -13,7 +13,7 @@ func (a Ambience) TalkAbout(ambienceType string) {
 	find, ok := a.find(ambienceType)
 
 	if ok {
-		utils.UniverseSay(utils.ChooseRandom(find.Narration))
+		utils.UniverseSay(utils.Random(find.Narration))
 	}
 }
 

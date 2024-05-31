@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 func SystemSay(message string) {
@@ -11,6 +12,13 @@ func SystemSay(message string) {
 
 func NPCSay(message string) {
 	fmt.Printf("\n\t\033[0;33mNPC: %s\033[0m\n\n", message)
+}
+
+func DelayDialog(value []string, delay time.Duration) {
+	for _, text := range value {
+		UniverseSay(text)
+		time.Sleep(delay * time.Millisecond)
+	}
 }
 
 func UniverseSay(message ...string) {

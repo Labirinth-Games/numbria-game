@@ -72,6 +72,8 @@ func main() {
 	player.Load(world, books)
 	player.Spawn()
 
+	ctx := game.Context{}
+
 	// init game
 
 	fmt.Print(logo)
@@ -93,7 +95,7 @@ func main() {
 		if response.Type != "" {
 			switch response.Type {
 			case "Player":
-				player.Invoke(response.Action, text, response.Response)
+				player.Invoke(&ctx, response.Action, text, response.Response)
 			}
 		}
 

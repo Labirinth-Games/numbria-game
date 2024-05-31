@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Joeverson/numbria-game/core"
+	"github.com/Joeverson/numbria-game/game"
 	"github.com/Joeverson/numbria-game/utils"
 )
 
@@ -18,6 +19,7 @@ const (
 type StoryTelling struct {
 	Current int
 	Book    core.Books
+	Ctx     *game.Context
 }
 
 func (st StoryTelling) Execute() {

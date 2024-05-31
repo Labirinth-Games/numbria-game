@@ -8,7 +8,7 @@ type Zone int
 
 const (
 	Florest Zone = iota + 1
-	Plain
+	Clearing
 	River
 	Boss
 	Cave
@@ -58,7 +58,7 @@ func pixelMapTypeCheck(zone Zone, pixel utils.Pixel) bool {
 	switch zone {
 	case Florest:
 		return pixel == utils.Pixel{R: 26, G: 122, B: 62, A: 255} // green
-	case Plain:
+	case Clearing:
 		return pixel == utils.Pixel{R: 89, G: 193, B: 53, A: 255} // green light
 	case River:
 		return pixel == utils.Pixel{R: 36, G: 159, B: 222, A: 255} // blue
@@ -78,7 +78,7 @@ func translatePixelToZoneName(pixel utils.Pixel) string {
 	case utils.Pixel{R: 26, G: 122, B: 62, A: 255}:
 		return "floresta"
 	case utils.Pixel{R: 89, G: 193, B: 53, A: 255}:
-		return "planicie"
+		return "clareira"
 	case utils.Pixel{R: 36, G: 159, B: 222, A: 255}:
 		return "rio"
 	case utils.Pixel{R: 180, G: 32, B: 42, A: 255}:
@@ -97,7 +97,7 @@ func translatePixelToZone(pixel utils.Pixel) Zone {
 	case utils.Pixel{R: 26, G: 122, B: 52, A: 255}:
 		return Florest
 	case utils.Pixel{R: 89, G: 193, B: 53, A: 255}:
-		return Plain
+		return Clearing
 	case utils.Pixel{R: 36, G: 159, B: 222, A: 255}:
 		return River
 	case utils.Pixel{R: 180, G: 32, B: 42, A: 255}:

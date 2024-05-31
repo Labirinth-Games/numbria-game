@@ -1,0 +1,35 @@
+__TYPE__:Bestiary
+
+---------------------
+#NAME
+Globin
+
+#DESCRIPTION
+Pequena criatura verde que anda em bandos
+
+#HP
+4
+
+#ACCURACY
+2
+
+#STRENGTH
+d4
+
+---------------------
+#NAME
+Huki
+
+#DESCRIPTION
+Monstro exclusivo, pequeno menor que um goblin, mas com pele escura e olhos amarelos grandes, vesntindo folhas secas e pelos como de coelho saindo abaixo nas narinas apontando para cima.
+
+#HP
+5
+
+#ACCURACY
+1
+
+#STRENGTH
+d4
+
+----------------------
