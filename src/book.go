@@ -15,6 +15,7 @@ const (
 
 	PLAYER_DICTIONARY = "./books/player.dictionary"
 	EVENT_DICTIONARY  = "./books/event.dictionary"
+	BATTLE_DICTIONARY = "./books/battle.dictionary"
 )
 
 type Book struct {
@@ -34,6 +35,7 @@ func (book *Book) Load() {
 	book.Dictionary = SerializerDictionary([]utils.InterpreterConfig{
 		utils.Interpreter(PLAYER_DICTIONARY),
 		utils.Interpreter(EVENT_DICTIONARY),
+		utils.Interpreter(BATTLE_DICTIONARY),
 	})
 }
 

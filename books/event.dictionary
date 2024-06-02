@@ -1,4 +1,4 @@
-__TYPE__:Event
+__TYPE__:event
 
 ---------------
 
@@ -17,13 +17,14 @@ Tá ruim de ver, mas você força os olhos para poder tentar interpretar
 #ACTION
 ObserverAction
 
--------------
+--------------
+
 #ASK
-eu ataca
-corro para cima e ataco
+eu ataco
+corro para cima
 ataque
-preparo as armas
-pego a minha arma
+vou lutar
+vou atacar
 
 #ANSWER
 Como um otimo mercenários que é, você vai pra cima da criatura.

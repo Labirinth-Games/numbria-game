@@ -1,9 +1,9 @@
-__TYPE__:Event
+__TYPE__:battle
 
 -------------
 #NARRATION
-Voce se aproxima de forma rapida e acerta com um golpe no %s
-Voce consegue acertar o estomago do %s
+Voce se aproxima de forma rapida, onde o %s não consegue esperar e acerta com um golpe com força.
+Voce consegue se adiantar e acertar o estomago do %s com precisão.
 
 #STATUS
 sucess

@@ -11,6 +11,14 @@ Pequena criatura verde que anda em bandos
 Você consegue ver, pelo tamanho e tipo de corpo já sabe quem é.... é um GOBLIN, sujo e nojento goblin
 Inconfundivel, é um goblin
 
+#NARRATION_ATTACK_SUCESS
+O goblin, corre e se joga em cima de voce acertando um golpe em seu braço. Logo você sacode ele e ele cai.
+O goblin vem correndo gritando, você se assusta com a zuada quando se da por si, ele consegue espetar sua perna com sua arma.
+
+#NARRATION_ATTACK_FAIL
+Quando o goblin pula em você, por reflexo você desvia e o goblin cai de cara no chão
+O goblin vem correndo e segura sua perna, pronto para lhe furar... mas voce consegue chutar ele para longe antes que ele consiga furar você.
+
 #HP
 4
 
@@ -31,6 +39,14 @@ Monstro exclusivo, pequeno menor que um goblin, mas com pele escura e olhos amar
 Você consegue ver, pelo tamanho e tipo de corpo já sabe quem é.... é um HUKI, estranho com seus grandes olhos
 Inconfundivel, é um huki
 
+#NARRATION_ATTACK_SUCESS
+O huki, corre e se joga em cima de voce acertando um golpe em seu braço. Logo você sacode ele e ele cai.
+O huki vem correndo gritando, você se assusta com a zuada quando se da por si, ele consegue espetar sua perna com sua arma.
+
+#NARRATION_ATTACK_FAIL
+Quando o huki pula em você, por reflexo você desvia e o huki cai de cara no chão
+O goblin vem correndo e segura sua perna, pronto para lhe furar... mas voce consegue chutar ele para longe antes que ele consiga furar você.
+
 #HP
 5
 
@@ -39,5 +55,3 @@ Inconfundivel, é um huki
 
 #STRENGTH
 d4
-
-----------------------

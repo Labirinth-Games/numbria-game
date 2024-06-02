@@ -12,7 +12,7 @@ import (
 
 type Player struct {
 	World World
-	Stats model.PlayerModel
+	Stats *model.PlayerModel
 
 	x         int
 	y         int
@@ -20,7 +20,7 @@ type Player struct {
 }
 
 func (p *Player) Load(world World) {
-	stats := model.PlayerModel{}
+	stats := &model.PlayerModel{}
 	stats.Create("PlayerName")
 
 	p.Stats = stats
@@ -57,17 +57,24 @@ func (p *Player) move() {
 func (p *Player) Hit(damage int) {
 	p.Stats.HP -= damage
 
-	utils.SystemDialog(fmt.Sprintf("Voce levou um dano de %d", damage))
+	utils.SystemDialog(fmt.Sprintf("Voce sofreu %d de dano", damage))
 
 	if p.Stats.HP <= 0 {
 		p.Die()
 	}
-
 }
 
 func (p *Player) Die() {
 	utils.SystemDialog("\t\t ================= YOU DIE ================ \n\n")
 	os.Exit(0)
+}
+
+func (p *Player) Attack() int {
+	if utils.TestPrecision(p.Stats.Accuracy) {
+		return utils.RollDice(p.Stats.Strength)
+	}
+
+	return 0
 }
 
 /* -------------------------------------------------------------------------- */

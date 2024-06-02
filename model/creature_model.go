@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/Joeverson/numbria-game/utils"
@@ -11,11 +12,13 @@ const (
 )
 
 type CreatureModel struct {
-	Name           string
-	Stats          StatsModel
-	Description    string
-	ObserverSucess []string
-	Level          int
+	Name                    string
+	Stats                   *StatsModel
+	Description             string
+	NarrationObserverSucess []string
+	NarrationAttackSucess   []string
+	NarrationAttackFail     []string
+	Level                   int
 }
 
 type StatsModel struct {
@@ -37,25 +40,29 @@ func (c *CreatureModel) Create() {
 
 	c.Name = creature.Name
 	c.Description = creature.Description
-	c.ObserverSucess = creature.ObserverSucess
+	c.NarrationObserverSucess = creature.NarrationObserverSucess
+	c.NarrationAttackFail = creature.NarrationAttackFail
+	c.NarrationAttackSucess = creature.NarrationAttackSucess
+
 	c.Stats = creature.Stats
 }
 
 func (c *CreatureModel) Hit(damage int) {
+	c.Stats.HP -= damage
 
+	utils.SystemDialog(fmt.Sprintf("%s recebeu %d de dano", c.Name, damage))
 }
 
 func (c *CreatureModel) Attack() int {
 	if utils.TestPrecision(c.Stats.Accuracy) {
-
 		return utils.RollDice(c.Stats.Strength)
 	}
 
 	return 0
 }
 
-func (c *CreatureModel) Die() {
-
+func (c *CreatureModel) IsDie() bool {
+	return c.Stats.HP <= 0
 }
 
 func Serializer(data utils.InterpreterConfig) []CreatureModel {
@@ -67,10 +74,12 @@ func Serializer(data utils.InterpreterConfig) []CreatureModel {
 		}
 
 		creature = append(creature, CreatureModel{
-			Name:           utils.GetFirst("#NAME", item),
-			Description:    utils.GetFirst("#DESCRIPTION", item),
-			ObserverSucess: item["#OBSERVER_SUCESS"],
-			Stats: StatsModel{
+			Name:                    utils.GetFirst("#NAME", item),
+			Description:             utils.GetFirst("#DESCRIPTION", item),
+			NarrationObserverSucess: item["#OBSERVER_SUCESS"],
+			NarrationAttackSucess:   item["#NARRATION_ATTACK_SUCESS"],
+			NarrationAttackFail:     item["#NARRATION_ATTACK_FAIL"],
+			Stats: &StatsModel{
 				HP:       utils.GetFirstToInt("#HP", item),
 				Accuracy: utils.GetFirstToInt("#ACCURACY", item),
 				Strength: utils.ConvertToDiceEnum(utils.GetFirst("#STRENGTH", item)),

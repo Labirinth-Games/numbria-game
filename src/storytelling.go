@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	DELAY_TO_SHOW_MESSAGE = 10 // milliseconds 1500 default
+	DELAY_TO_SHOW_MESSAGE = 500 // milliseconds 1500 default
 	INITIAL_CHAPTER_INDEX = "001"
 )
 

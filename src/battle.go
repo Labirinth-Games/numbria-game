@@ -2,7 +2,6 @@ package Numbria
 
 import (
 	"fmt"
-	"math/rand/v2"
 
 	"github.com/Joeverson/numbria-game/model"
 	"github.com/Joeverson/numbria-game/types"
@@ -55,7 +54,7 @@ func IniciativeToggle(ctx *Context) {
 	}
 }
 
-func (b *Battle) GetNarrationSucess() string {
+func (b *Battle) PlayerNarrationSucess() string {
 	for _, model := range b.Models {
 		if model.Status == string(types.BattleStatusType.Sucess) {
 			return utils.Random(model.Narration)
@@ -65,7 +64,7 @@ func (b *Battle) GetNarrationSucess() string {
 	return ""
 }
 
-func (b *Battle) GetNarrationFail() string {
+func (b *Battle) PlayerNarrationFail() string {
 	for _, model := range b.Models {
 		if model.Status == string(types.BattleStatusType.Fail) {
 			return utils.Random(model.Narration)
@@ -79,20 +78,54 @@ func (b *Battle) GetNarrationFail() string {
 /*                                Actions                                     */
 /* -------------------------------------------------------------------------- */
 
-// func (b *Battle) AttackCreature(target model.CreatureModel) {
-// 	damage := creature.Attack()
-// 	ctx.Player.Hit(damage)
-
-// 	utils.NarrationDialog(ctx.Battle.GetNarrationSucess(), creature.Name)
-// }
-
-func (b *Battle) AttackPlayer(ctx *Context) {
+func (b *Battle) EnemyAttack(ctx *Context) {
 	creature := ctx.Creatures[0]
 	damage := creature.Attack()
 
-	ctx.Player.Hit(damage)
+	if damage == 0 {
+		utils.NarrationDialog(utils.Random(creature.NarrationAttackFail))
+		return
+	}
 
-	utils.NarrationDialog(b.GetNarrationFail(), creature.Name)
+	utils.NarrationDialog(utils.Random(creature.NarrationAttackSucess))
+	ctx.Player.Hit(damage)
+}
+
+func (b *Battle) PlayerAttack(ctx *Context) {
+	damage := ctx.Player.Attack()
+	creature := ctx.Creatures[0]
+
+	if damage == 0 {
+		utils.NarrationDialog(b.PlayerNarrationFail(), creature.Name)
+		return
+	}
+
+	utils.NarrationDialog(b.PlayerNarrationSucess(), creature.Name)
+	creature.Hit(damage)
+}
+
+func (b *Battle) Combat(ctx *Context) {
+	if !ctx.InBattle {
+		RollIniciative(ctx)
+		ctx.InBattle = true
+	}
+
+	var first, second func(*Context) = b.PlayerAttack, b.EnemyAttack
+
+	if ctx.IsIniciativeEnemy() {
+		first, second = second, first
+	}
+
+	first(ctx)
+	second(ctx)
+
+	if ctx.Creatures[0].IsDie() {
+		//TODO - drop item no futuro
+
+		ctx.InBattle = false
+		ctx.InEvent = false
+
+	}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -100,23 +133,23 @@ func (b *Battle) AttackPlayer(ctx *Context) {
 /* -------------------------------------------------------------------------- */
 
 func (e *Battle) Invoke(ctx *Context, funcName string, args ...interface{}) {
-
-	var ActionsMapper = map[string]interface{}{}
+	if !ctx.InEvent {
+		utils.SystemDialog(utils.Random([]string{
+			"Não entendi o que voce quis fazer.",
+			"Acho que voce endoidou, falando coisa com coisa",
+			"Acho que não lhe entendi, o que vc quer?",
+		}))
+		return
+	}
+	var ActionsMapper = map[string]interface{}{
+		"Combate": e.Combat,
+	}
 
 	action, ok := ActionsMapper[funcName]
 
 	if !ok {
-		if ctx.InBattle && ctx.InEvent {
-			utils.SystemDialog("Não entendi o que voce quis fazer.")
-			return
-		}
-
-		text := args[0].(string)
-		answers := args[1].([]string)
-
-		utils.NarrationDialog(answers[rand.IntN(len(answers))], text)
 		return
 	}
 
-	action.(func(ctx *Context, text string, answers []string))(ctx, args[0].(string), args[1].([]string))
+	action.(func(ctx *Context))(ctx)
 }

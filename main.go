@@ -43,7 +43,7 @@ func main() {
 	storytelling.Execute()
 
 	for {
-		fmt.Print("\n[Você diz]: ")
+		utils.DisplayCommandIndicator(ctx.InBattle)
 		text, _ := reader.ReadString('\n')
 
 		text = strings.ToLower(text)
@@ -53,11 +53,11 @@ func main() {
 
 		if ok {
 			switch response.CommandType {
-			case "Player":
+			case "player":
 				player.Invoke(&ctx, response.Action, text, response.Response)
-			case "Event":
+			case "event":
 				ctx.Event.Invoke(&ctx, response.Action, text, response.Response)
-			case "Battle":
+			case "battle":
 				ctx.Battle.Invoke(&ctx, response.Action, text, response.Response)
 			}
 		}

@@ -73,7 +73,7 @@ func (e *Event) observerAction(ctx *Context, text string, answers []string) {
 
 	if ctx.IsIniciativePlayer() {
 		if ctx.CurrentEvent.IsCreature() {
-			utils.NarrationDialog(utils.Random(creature.ObserverSucess))
+			utils.NarrationDialog(utils.Random(creature.NarrationObserverSucess))
 		}
 	}
 
@@ -81,16 +81,30 @@ func (e *Event) observerAction(ctx *Context, text string, answers []string) {
 		utils.NarrationDialog(utils.Random(ctx.CurrentEvent.Fail))
 
 		if ctx.CurrentEvent.IsCreature() {
-
 			// NOTE - Quando o jogador tenta observar mas n consegue o monstro dem 40% de chande de atacar
 			if utils.IsProbable(0.4) {
-				ctx.Battle.AttackPlayer(ctx)
+				e.startEventAttack(ctx, "", []string{})
+				ctx.Battle.EnemyAttack(ctx)
 			}
 		}
 	}
 
 	// utils.SystemDialog(ctx.CurrentEvent.System)
 	ctx.InEvent = false
+}
+
+func (e *Event) startEventAttack(ctx *Context, text string, answers []string) {
+	if !ctx.CurrentEvent.IsCreature() {
+		utils.SystemDialog(utils.Random([]string{
+			"Não tem ninguem para voce atacar.",
+			"Acho que voce endoidou, falando coisa com coisa, querendo bater no vento, vamos diminuir na bebida ai em.",
+		}))
+		return
+	}
+
+	ctx.InBattle = true
+
+	utils.DisplayInitBattle()
 }
 
 /* -------------------------------------------------------------------------- */
@@ -109,8 +123,8 @@ func (e *Event) Invoke(ctx *Context, funcName string, args ...interface{}) {
 	}
 
 	var ActionsMapper = map[string]interface{}{
-		"ObserverAction": e.observerAction,
-		// "StartEventAttack":   e.StartEventAttack,
+		"ObserverAction":   e.observerAction,
+		"StartEventAttack": e.startEventAttack,
 	}
 
 	action, ok := ActionsMapper[funcName]
