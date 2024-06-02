@@ -1,4 +1,4 @@
-package core
+package Numbria
 
 import (
 	"sort"
@@ -13,7 +13,7 @@ type Match struct {
 	dictionary model.Dictionary
 }
 
-func Process(input string, dictionaries []model.Dictionary) model.Dictionary {
+func Brain(input string, dictionaries []model.Dictionary) (model.Dictionary, bool) {
 	var matchs []Match
 
 	// quebrar o tesxto que recebeu
@@ -46,7 +46,7 @@ func amountOccurrences(originArr []string, targetArr []string) int {
 	return occors
 }
 
-func win(matchs []Match) model.Dictionary {
+func win(matchs []Match) (model.Dictionary, bool) {
 	sort.Slice(matchs, func(i, j int) bool {
 		return matchs[j].Rate < matchs[i].Rate
 	})
@@ -65,13 +65,14 @@ func win(matchs []Match) model.Dictionary {
 		concuring = append(concuring, matchs[i+1])
 	}
 
+	// calc the priority
 	sort.Slice(concuring, func(i, j int) bool {
-		return matchs[j].dictionary.Priority > matchs[i].dictionary.Priority
+		return matchs[j].dictionary.Priority < matchs[i].dictionary.Priority
 	})
 
 	if len(matchs) > 0 {
-		return matchs[0].dictionary
+		return matchs[0].dictionary, true
 	}
 
-	return model.Dictionary{}
+	return model.Dictionary{}, false
 }

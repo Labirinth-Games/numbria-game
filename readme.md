@@ -135,8 +135,11 @@ Ele é usado para indexar a proxima parte da historia, assim quando um trecho fi
 #### `#CONTENT`
 Conteudo que será imprimido na tela do jogador, onde pode ser multilinhas e cada linha terá um tempo para ser imprimida
 
-#### `#GOTO`
-Esse comando é um redirecionamento automatico da historia, ou seja, quando ele esta descrito dentro de uma lore e o conteudo tenha sido imprimido na tela, em seguida ele vai chamar o goto para continuar automaticamente a historia em outro ponto do book.
+#### `#NEXT`
+Esse comando é usado para poder dizer qual á a proxima parte da historia, então ele é a ligaçao da chave encadeada de partes da historias
+
+#### `#NEXT_AUTOMATIC`
+Esse comando é tem a mesma funçao do next só que é executado de forma automatica, quando termina todo o dialog de uma lore ele chama o proximo setado no next
 
 #### `#SYSTEM`
 Mensagem do sistema para o jogar, momento que o sistema pede para ele fazer alguma coisa ou tomar uma decisão.
@@ -155,3 +158,15 @@ Comando importante, usado para definir qual o nome da funçao que será chamada 
 
 #### `#PRIORITY`
 Quando adicionado é responsavel por valor na busca após o treinamento ou seja, se tiver duas açoes com comandos bem semelhantes ele serve de desempate para poder imprimir uma ação
+
+### Comandos no Betiario
+
+#### `#OBSERVER_SUCESS`
+Usado como resposta quando o player encontra com a criatura e tenta descobrir quem é e ao rolar a iniciativa
+consegue ver, ou seja, a rolagem é favoravel ao player entao o dialog vai ser esse aqui
+
+### Comandos no Eventos
+
+#### `#FAIL`
+Usado quando rola o teste pra saber se consegue descobrir, em caso de falha ele mostra essa mensagem
+

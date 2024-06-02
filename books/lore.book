@@ -9,7 +9,9 @@ Você é um mercenário que aceitou pegar o cantrato mais desafiante de todos on
 Esse contrato era completamente desafiador e considerado por muitos uma sentença de morte!
 Mas destemido e cego pela montanha de ouro, fama e quantidade inimaginavel de espolios voce se jogou na missão.
 
-#GOTO
+#NEXT_AUTOMATIC
+
+#NEXT
 002
 
 ------------------
@@ -21,3 +23,6 @@ Voce está numa floresta, ansioso para poder conquistar seu premio logo se apres
 
 #SYSTEM
 O que voce faz?
+
+#NEXT
+003

@@ -1,31 +1,30 @@
-package persona
+package Numbria
 
 import (
 	"fmt"
 	"math/rand/v2"
+	"os"
 	"strings"
 
-	"github.com/Joeverson/numbria-game/core"
-	"github.com/Joeverson/numbria-game/game"
 	"github.com/Joeverson/numbria-game/model"
-	"github.com/Joeverson/numbria-game/types"
 	"github.com/Joeverson/numbria-game/utils"
 )
 
 type Player struct {
-	World      game.World
-	book       core.Books
-	Dictionary []model.Dictionary
-	x          int
-	y          int
-	direction  string
+	World World
+	Stats model.PlayerModel
+
+	x         int
+	y         int
+	direction string
 }
 
-func (p *Player) Load(world game.World, book core.Books) {
+func (p *Player) Load(world World) {
+	stats := model.PlayerModel{}
+	stats.Create("PlayerName")
 
-	p.Dictionary = book.Player.ToPlayer()
+	p.Stats = stats
 	p.World = world
-	p.book = book
 }
 
 func (player *Player) Spawn() {
@@ -55,15 +54,31 @@ func (p *Player) move() {
 	}
 }
 
+func (p *Player) Hit(damage int) {
+	p.Stats.HP -= damage
+
+	utils.SystemDialog(fmt.Sprintf("Voce levou um dano de %d", damage))
+
+	if p.Stats.HP <= 0 {
+		p.Die()
+	}
+
+}
+
+func (p *Player) Die() {
+	utils.SystemDialog("\t\t ================= YOU DIE ================ \n\n")
+	os.Exit(0)
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                Actions                                     */
 /* -------------------------------------------------------------------------- */
 
-func (p Player) WhereIAm(ctx *game.Context, text string, answers []string) {
-	utils.UniverseSay(utils.Random(answers), p.getPlaceName())
+func (p Player) WhereIAm(ctx *Context, text string, answers []string) {
+	utils.NarrationDialog(utils.Random(answers), p.getPlaceName())
 }
 
-func (p Player) WhatsThere(ctx *game.Context, text string, answers []string) {
+func (p Player) WhatsThere(ctx *Context, text string, answers []string) {
 	var direction string
 
 	for _, dir := range []string{"norte", "sul", "leste", "oeste"} {
@@ -75,29 +90,38 @@ func (p Player) WhatsThere(ctx *game.Context, text string, answers []string) {
 
 	message := fmt.Sprintf(utils.Random(answers), direction, p.getPlaceName())
 
-	utils.UniverseSay(message)
+	utils.NarrationDialog(message)
 }
 
-func (p *Player) Walk(ctx *game.Context, text string, answers []string) {
+func (p *Player) Walk(ctx *Context, text string, answers []string) {
 	p.direction = utils.ExtractString(text, []string{"norte", "sul", "leste", "oeste"})
 
 	p.move()
 
-	hasEvent := eventProcess(ctx, p)
+	hasEvent := eventProcess(ctx)
 
 	if hasEvent {
 		return
 	}
 
-	p.book.Ambience.TalkAbout(p.getPlaceName())
-	utils.UniverseSay(utils.Random(answers), p.direction)
+	ctx.Ambience.TalkAbout(p.getPlaceName())
+	utils.NarrationDialog(utils.Random(answers), p.direction)
 }
 
-func eventProcess(ctx *game.Context, p *Player) bool {
-	event, subEvent, hasEvent := p.book.Event.TriggerEvent()
+/* -------------------------------------------------------------------------- */
+/*                                Utils                                       */
+/* -------------------------------------------------------------------------- */
+
+func eventProcess(ctx *Context) bool {
+	if ctx.InEvent {
+		return false
+	}
+
+	event, subEvent, hasEvent := ctx.Event.TryTriggerEvent()
 
 	if hasEvent {
-		if event.EventTypeEnum == types.EventTypeEnum.Creature {
+		ctx.InEvent = true
+		if event.IsCreature() {
 			creature := subEvent.(model.CreatureModel)
 
 			ctx.Creatures = append(ctx.Creatures, creature)
@@ -117,26 +141,31 @@ func (p Player) GetPositionInfo() {
 	fmt.Printf("\n x:%d y:%d - place: %s\n\n", p.x, p.y, p.getPlaceName())
 }
 
+func (p Player) StatsInfo() {
+	fmt.Printf("\n Hp: %d, Accuracy: %d \n\n", p.Stats.HP, p.Stats.Accuracy)
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                Utils Dynamic                               */
 /* -------------------------------------------------------------------------- */
 
-func (p *Player) Invoke(ctx *game.Context, name string, args ...interface{}) {
+func (p *Player) Invoke(ctx *Context, funcName string, args ...interface{}) {
+
 	var ActionsMapper = map[string]interface{}{
 		"Walk":       p.Walk,
 		"WhereIAm":   p.WhereIAm,
 		"WhatsThere": p.WhatsThere,
 	}
 
-	action, ok := ActionsMapper[name]
+	action, ok := ActionsMapper[funcName]
 
 	if !ok {
 		text := args[0].(string)
 		answers := args[1].([]string)
 
-		utils.UniverseSay(answers[rand.IntN(len(answers))], text)
+		utils.NarrationDialog(answers[rand.IntN(len(answers))], text)
 		return
 	}
 
-	action.(func(ctx *game.Context, text string, answers []string))(ctx, args[0].(string), args[1].([]string))
+	action.(func(ctx *Context, text string, answers []string))(ctx, args[0].(string), args[1].([]string))
 }

@@ -45,6 +45,10 @@ func ConvertToDiceEnum(dice string) Dice {
 	return 0
 }
 
-func RollDice(dice int) int {
-	return rand.IntN(dice) + 1
+func RollDice(dice Dice) int {
+	return rand.IntN(int(dice)) + 1
+}
+
+func TestPrecision(accuracy int) bool {
+	return RollDice(Dices.D8) > accuracy
 }

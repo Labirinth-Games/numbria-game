@@ -1,4 +1,4 @@
-package game
+package Numbria
 
 import (
 	"github.com/Joeverson/numbria-game/utils"

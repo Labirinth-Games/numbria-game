@@ -6,22 +6,29 @@ import (
 	"time"
 )
 
-func SystemSay(message string) {
-	fmt.Printf("\n\t\033[0;31mSistema: %s\033[0m\n\n", message)
+func SystemDialog(message string) {
+	fmt.Printf("\t\033[0;31mSistema: %s\033[0m\n\n", message)
+}
+
+func SystemMultiplyDialog(value []string, delay time.Duration) {
+	for _, text := range value {
+		SystemDialog(text)
+		time.Sleep(delay * time.Millisecond)
+	}
 }
 
 func NPCSay(message string) {
 	fmt.Printf("\n\t\033[0;33mNPC: %s\033[0m\n\n", message)
 }
 
-func DelayDialog(value []string, delay time.Duration) {
+func NarrationMultiplyDialog(value []string, delay time.Duration) {
 	for _, text := range value {
-		UniverseSay(text)
+		NarrationDialog(text)
 		time.Sleep(delay * time.Millisecond)
 	}
 }
 
-func UniverseSay(message ...string) {
+func NarrationDialog(message ...string) {
 	if len(message) == 1 {
 		fmt.Printf("\n\t%s\n", message[0])
 		return

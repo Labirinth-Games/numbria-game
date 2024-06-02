@@ -7,8 +7,8 @@ import (
 )
 
 type InterpreterConfig struct {
-	Contents map[int]map[string][]string
-	Type     string
+	Book map[int]map[string][]string
+	Type string
 }
 
 func readBook(path string) ([]string, bool) {
@@ -74,7 +74,7 @@ func Interpreter(path string) InterpreterConfig {
 	}
 
 	return InterpreterConfig{
-		Contents: interpretMap,
-		Type:     bookType,
+		Book: interpretMap,
+		Type: bookType,
 	}
 }

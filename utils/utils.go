@@ -2,6 +2,7 @@ package utils
 
 import (
 	"math/rand/v2"
+	"strconv"
 	"strings"
 )
 
@@ -31,4 +32,40 @@ func ExtractString(input string, find []string) string {
 
 func Random[T any](elements []T) T {
 	return elements[rand.IntN(len(elements))]
+}
+
+func Exist(key string, mapper map[string][]string) bool {
+	_, ok := mapper[key]
+
+	return ok
+}
+
+func GetFirst(key string, mapper map[string][]string) string {
+	value, ok := mapper[key]
+
+	if ok {
+		return value[0]
+	}
+
+	return ""
+}
+
+func GetFirstToInt(key string, mapper map[string][]string) int {
+	value, ok := mapper[key]
+
+	if !ok {
+		return 0
+	}
+
+	intValue, err := strconv.Atoi(value[0])
+
+	if err != nil {
+		panic(err)
+	}
+
+	return intValue
+}
+
+func IsProbable(percent float32) bool {
+	return rand.Float32() <= percent
 }

@@ -6,7 +6,10 @@ Você observa uma silhueta estranha a sua frente, mas não consegue entender o q
 Por um breve momento ela parece se esconder.
 
 #SYSTEM
-O que voce faz?
+O que voce faz? (pode fugir, atacar ou observar)
+
+#FAIL
+você olha e força os olhos, mas não consegue entender o que é
 
 #EVENT_TYPE
 creature

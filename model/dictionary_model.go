@@ -7,9 +7,9 @@ type Book struct {
 type ActionFn func() string
 
 type Dictionary struct {
-	Response []string
-	Inputs   []string
-	Action   string
-	Type     string
-	Priority int
+	Response    []string
+	Inputs      []string
+	Action      string
+	CommandType string
+	Priority    int
 }

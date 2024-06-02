@@ -2,7 +2,6 @@ package model
 
 import (
 	"log"
-	"strconv"
 
 	"github.com/Joeverson/numbria-game/utils"
 )
@@ -12,10 +11,11 @@ const (
 )
 
 type CreatureModel struct {
-	Name        string
-	Stats       StatsModel
-	Description string
-	Level       int
+	Name           string
+	Stats          StatsModel
+	Description    string
+	ObserverSucess []string
+	Level          int
 }
 
 type StatsModel struct {
@@ -24,7 +24,7 @@ type StatsModel struct {
 	Strength utils.Dice
 }
 
-func (m *CreatureModel) Create() {
+func (c *CreatureModel) Create() {
 	creatureBook := utils.Interpreter(BESTIARY_BOOK)
 	creatures := Serializer(creatureBook)
 
@@ -35,29 +35,45 @@ func (m *CreatureModel) Create() {
 
 	creature := utils.Random(creatures)
 
-	m.Name = creature.Name
-	m.Description = creature.Description
-	m.Stats = creature.Stats
+	c.Name = creature.Name
+	c.Description = creature.Description
+	c.ObserverSucess = creature.ObserverSucess
+	c.Stats = creature.Stats
+}
+
+func (c *CreatureModel) Hit(damage int) {
+
+}
+
+func (c *CreatureModel) Attack() int {
+	if utils.TestPrecision(c.Stats.Accuracy) {
+
+		return utils.RollDice(c.Stats.Strength)
+	}
+
+	return 0
+}
+
+func (c *CreatureModel) Die() {
+
 }
 
 func Serializer(data utils.InterpreterConfig) []CreatureModel {
 	creature := []CreatureModel{}
 
-	for _, item := range data.Contents {
+	for _, item := range data.Book {
 		if len(item) == 0 {
 			continue
 		}
 
-		HP, _ := strconv.Atoi(item["#HP"][0])
-		accuracy, _ := strconv.Atoi(item["#ACCURACY"][0])
-
 		creature = append(creature, CreatureModel{
-			Name:        item["#NAME"][0],
-			Description: item["#DESCRIPTION"][0],
+			Name:           utils.GetFirst("#NAME", item),
+			Description:    utils.GetFirst("#DESCRIPTION", item),
+			ObserverSucess: item["#OBSERVER_SUCESS"],
 			Stats: StatsModel{
-				HP:       HP,
-				Accuracy: accuracy,
-				Strength: utils.ConvertToDiceEnum(item["#STRENGTH"][0]),
+				HP:       utils.GetFirstToInt("#HP", item),
+				Accuracy: utils.GetFirstToInt("#ACCURACY", item),
+				Strength: utils.ConvertToDiceEnum(utils.GetFirst("#STRENGTH", item)),
 			},
 		})
 	}

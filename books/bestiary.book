@@ -7,6 +7,10 @@ Globin
 #DESCRIPTION
 Pequena criatura verde que anda em bandos
 
+#OBSERVER_SUCESS
+Você consegue ver, pelo tamanho e tipo de corpo já sabe quem é.... é um GOBLIN, sujo e nojento goblin
+Inconfundivel, é um goblin
+
 #HP
 4
 
@@ -22,6 +26,10 @@ Huki
 
 #DESCRIPTION
 Monstro exclusivo, pequeno menor que um goblin, mas com pele escura e olhos amarelos grandes, vesntindo folhas secas e pelos como de coelho saindo abaixo nas narinas apontando para cima.
+
+#OBSERVER_SUCESS
+Você consegue ver, pelo tamanho e tipo de corpo já sabe quem é.... é um HUKI, estranho com seus grandes olhos
+Inconfundivel, é um huki
 
 #HP
 5

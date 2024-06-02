@@ -62,36 +62,3 @@ Opa, tudo bem e por ai? só toma cuidado para não se distrair e ser atacado
 Oi, tudo bem mercenário.
 kkkkkk, cuida da sua vida.
 
-#ACTION
-Event
-
----------------
-
-#ASK
-eu tento observar
-tento olhar
-fico observando atento
-fico parado
-
-#ANSWER
-Você fica observando entendo entender o que tá acontecendo.
-Tá ruim de ver, mas você força os olhos para poder tentar interpretar
-
-#ACTION
-ResponseEventObserver
-
--------------
-#ASK
-eu ataca
-corro para cima e ataco
-ataque
-preparo as armas
-pego a minha arma
-
-#ANSWER
-Como um otimo mercenários que é, você vai pra cima da criatura.
-Boa sorte
-Coitado, vamos ver o que vai da kk
-
-#ACTION
-ResponseEventAttack

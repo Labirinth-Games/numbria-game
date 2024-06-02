@@ -6,81 +6,40 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Joeverson/numbria-game/controller"
-	"github.com/Joeverson/numbria-game/core"
-	"github.com/Joeverson/numbria-game/game"
-	"github.com/Joeverson/numbria-game/persona"
+	Numbria "github.com/Joeverson/numbria-game/src"
+	"github.com/Joeverson/numbria-game/types"
 	"github.com/Joeverson/numbria-game/utils"
 )
-
-const logo = `
-----------------------//\\
---------------------// ¤ \\
---------------------\\ ¤ //
---------------------- \\//
--------------------- (___)
----------------------(___)
----------------------(___)
----------------------(___)_________
-----------\_____/\__/----\__/\_____/
-------------\ _°_[-викинг-]_ _° /
-----------------\_°_¤ ---- ¤_°_/
---------------------\ __°__ /
----------------------|\_°_/|
----------------------[|\_/|]
----------------------[|[¤]|]
----------------------[|;¤;|]       ::      ::  ::    ::  ::          :: :: ::::    ::::::    ::   ::::::
----------------------[;;¤;;]       ::::    ::  ::    ::  ::::      :::: ::     ::  ::    ::  ::  ::    ::  
---------------------;;;;¤]|]\      ::  ::  ::  ::    ::  ::  ::  ::  :: :: ::::::  :: ::     ::  :: :: ::   
--------------------;;;;;¤]|]-\     ::    ::::  ::    ::  ::    ::    :: ::     ::  ::   ::   ::  ::    ::   
-------------------;;;;;[¤]|]--\    ::      ::  :: :: ::  ::          :: :: ::::    ::    ::  ::  ::    ::  
------------------;;;;;|[¤]|]---\
-----------------;;;;;[|[¤]|]|---| 
----------------;;;;;[|[¤]|]|---|
-----------------;;;;[|[¤]|/---/
------------------;;;[|[¤]/---/
-------------------;;[|[¤/---/
--------------------;[|[/---/
---------------------[|/---/
----------------------/---/
---------------------/---/|]
--------------------/---/]|];
-------------------/---/¤]|];;
------------------|---|[¤]|];;;
------------------|---|[¤]|];;;
-------------------\--|[¤]|];;
--------------------\-|[¤]|];
----------------------\|[¤]|]
-----------------------\\¤//
------------------------\|/
-------------------------V
-
-`
 
 func main() {
 	// loaders
 
 	reader := bufio.NewReader(os.Stdin)
 
-	world := game.World{}
+	world := Numbria.World{}
 	world.MapGenerate()
 
-	books := core.Books{}
+	books := Numbria.Book{}
 	books.Load()
 
-	player := persona.Player{}
-	player.Load(world, books)
+	player := Numbria.Player{}
+	player.Load(world)
 	player.Spawn()
 
-	ctx := game.Context{}
+	ctx := Numbria.Context{
+		Iniciative: types.IniciativeType.None,
+		Event:      books.Event,
+		Ambience:   books.Ambience,
+		Battle:     books.Battle,
+		Player:     player,
+	}
 
 	// init game
 
-	fmt.Print(logo)
+	//fmt.Print(logo) // pegar od arquivo na riaz
 	// time.Sleep(3 * time.Second)
 
-	storytelling := controller.StoryTelling{Current: 0, Book: books}
-
+	storytelling := Numbria.StoryTelling{Current: Numbria.INITIAL_CHAPTER_INDEX, Book: books}
 	storytelling.Execute()
 
 	for {
@@ -90,12 +49,16 @@ func main() {
 		text = strings.ToLower(text)
 		text = strings.Replace(text, "\n", "", -1)
 
-		response := core.Process(text, player.Dictionary)
+		response, ok := Numbria.Brain(text, books.Dictionary)
 
-		if response.Type != "" {
-			switch response.Type {
+		if ok {
+			switch response.CommandType {
 			case "Player":
 				player.Invoke(&ctx, response.Action, text, response.Response)
+			case "Event":
+				ctx.Event.Invoke(&ctx, response.Action, text, response.Response)
+			case "Battle":
+				ctx.Battle.Invoke(&ctx, response.Action, text, response.Response)
 			}
 		}
 
@@ -110,6 +73,10 @@ func main() {
 
 		if utils.ExistsStringInArray(text, []string{"!coor", "!c", "!coord"}) {
 			player.GetPositionInfo()
+		}
+
+		if utils.ExistsStringInArray(text, []string{"!stats", "!s"}) {
+			player.StatsInfo()
 		}
 	}
 }

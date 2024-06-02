@@ -1,0 +1,34 @@
+__TYPE__:Event
+
+---------------
+
+#ASK
+eu tento observar
+tento olhar
+fico observando atento
+fico parado
+eu observo
+eu vejo
+
+#ANSWER
+Você fica observando entendo entender o que tá acontecendo.
+Tá ruim de ver, mas você força os olhos para poder tentar interpretar
+
+#ACTION
+ObserverAction
+
+-------------
+#ASK
+eu ataca
+corro para cima e ataco
+ataque
+preparo as armas
+pego a minha arma
+
+#ANSWER
+Como um otimo mercenários que é, você vai pra cima da criatura.
+Boa sorte
+Coitado, vamos ver o que vai da kk
+
+#ACTION
+StartEventAttack
