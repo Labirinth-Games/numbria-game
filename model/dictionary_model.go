@@ -11,5 +11,6 @@ type Dictionary struct {
 	Inputs      []string
 	Action      string
 	CommandType string
+	Index       string
 	Priority    int
 }

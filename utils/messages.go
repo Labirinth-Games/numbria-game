@@ -7,7 +7,7 @@ import (
 )
 
 func SystemDialog(message string) {
-	fmt.Printf("\t\033[0;31mSistema: %s\033[0m\n", message)
+	fmt.Printf("\033[0;31m[Sistema]: %s\033[0m\n", message)
 }
 
 func SystemMultiplyDialog(value []string, delay time.Duration) {
@@ -21,6 +21,10 @@ func NPCSay(message string) {
 	fmt.Printf("\t\033[0;33mNPC: %s\033[0m\n", message)
 }
 
+func NarrationDialog(message string) {
+	fmt.Printf("\t%s\n", message)
+}
+
 func NarrationMultiplyDialog(value []string, delay time.Duration) {
 	for _, text := range value {
 		NarrationDialog(text)
@@ -28,42 +32,36 @@ func NarrationMultiplyDialog(value []string, delay time.Duration) {
 	}
 }
 
-func NarrationDialog(message ...string) {
-	if len(message) == 1 {
-		fmt.Printf("\t%s\n", message[0])
-		return
-	}
-
-	if len(message) > 1 {
-		if strings.Contains(message[0], "%s") {
-			m := fmt.Sprintf(message[0], message[1])
-			fmt.Printf("\t%s\n", m)
-
-			return
-		}
-
-		fmt.Printf("\t%s\n", message[0])
-	}
-}
-
 func SpaceBlank() {
 	fmt.Println("")
 }
 
-func DisplayInitBattle() {
-	message := `
+func DisplaySession(message string) {
+	display := fmt.Sprintf(`
 	========================================
-		Iniciar Batalha
+		%s
 	========================================
-	`
-	fmt.Printf("\t\033[0;31m%s\033[0m\n", message)
+	`, message)
+
+	fmt.Printf("\t\033[0;31m%s\033[0m\n", display)
 }
 
 func DisplayCommandIndicator(isBattle bool) {
 	if isBattle {
-		fmt.Print("\n[Usar habilidade]: ")
+		fmt.Print("\n[Modo Batalha]: ")
 		return
 	}
 
-	fmt.Print("\n[Você diz]: ")
+	fmt.Print("\n[Mundo]: ")
+}
+
+func TableItem(w string, size int) string {
+	remaindSpace := size - len(w)
+	var space []string
+
+	for i := 0; i < remaindSpace; i++ {
+		space = append(space, " ")
+	}
+
+	return w + strings.Join(space, "")
 }

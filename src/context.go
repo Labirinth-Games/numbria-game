@@ -6,17 +6,20 @@ import (
 )
 
 type Context struct {
-	Creatures    []model.CreatureModel
+	Creatures    []*model.CreatureModel
 	CurrentEvent model.EventModel
 	Ambience     Ambience
 	Event        Event
 	Battle       Battle
 	Player       Player
+	Skill        Skill
+	Storage      *model.Storage
 
 	Iniciative types.Iniciative
 
-	InBattle bool
-	InEvent  bool
+	InBattle     bool
+	InEvent      bool
+	IsTypingSave bool
 }
 
 func (c *Context) IsIniciativePlayer() bool {

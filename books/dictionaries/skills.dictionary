@@ -1,0 +1,34 @@
+__TYPE__:battle
+
+-------------
+#INDEX
+001
+
+#NAME
+Redemoinho de Espada
+
+#DESCRIPTION
+O mercenário gira a sua espada num borrão de movimento, criando um redemoinho de ar que pode desequilibrar os monstros. O ataque causa dano moderado e tem uma hipótese de atordoar o alvo.
+
+#HANKING
+B
+
+#ENERGY_POINT
+0
+
+-----------------
+
+#INDEX
+002
+
+#NAME
+soco
+
+#DESCRIPTION
+Um soco dado com as mão limpas, dependendo do jeito que pega pode derrubar.
+
+#HANKING
+C
+
+#ENERGY_POINT
+0

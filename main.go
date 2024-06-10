@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/Joeverson/numbria-game/model"
 	Numbria "github.com/Joeverson/numbria-game/src"
 	"github.com/Joeverson/numbria-game/types"
 	"github.com/Joeverson/numbria-game/utils"
 )
+
+var Context Numbria.Context
 
 func main() {
 	// loaders
@@ -32,22 +36,39 @@ func main() {
 		Ambience:   books.Ambience,
 		Battle:     books.Battle,
 		Player:     player,
+		Skill:      books.Skill,
+		Storage:    &model.StorageData,
 	}
 
-	// init game
+	Context = ctx
 
-	//fmt.Print(logo) // pegar od arquivo na riaz
-	// time.Sleep(3 * time.Second)
+	player.ReceiveSkill(&ctx, "001")
+	player.ReceiveSkill(&ctx, "002")
+
+	// init game
+	logo, ok := utils.ReadFileToString("./logo.txt")
+	if ok {
+		fmt.Print(logo) // pegar od arquivo na riaz
+		time.Sleep(3 * time.Second)
+	}
 
 	storytelling := Numbria.StoryTelling{Current: Numbria.INITIAL_CHAPTER_INDEX, Book: books}
-	storytelling.Execute()
 
 	for {
-		utils.DisplayCommandIndicator(ctx.InBattle)
-		text, _ := reader.ReadString('\n')
+		lore := storytelling.GetLore(&ctx)
+		storytelling.Play(ctx)
 
+		utils.DisplayCommandIndicator(ctx.InBattle)
+
+		text, _ := reader.ReadString('\n')
 		text = strings.ToLower(text)
 		text = strings.Replace(text, "\n", "", -1)
+
+		if ctx.IsTypingSave {
+			ctx.Storage.Save(lore.Save, text)
+			ctx.IsTypingSave = false
+			continue
+		}
 
 		response, ok := Numbria.Brain(text, books.Dictionary)
 
@@ -58,7 +79,7 @@ func main() {
 			case "event":
 				ctx.Event.Invoke(&ctx, response.Action, text, response.Response)
 			case "battle":
-				ctx.Battle.Invoke(&ctx, response.Action, text, response.Response)
+				ctx.Battle.Invoke(&ctx, response.Action, response)
 			}
 		}
 
@@ -77,6 +98,10 @@ func main() {
 
 		if utils.ExistsStringInArray(text, []string{"!stats", "!s"}) {
 			player.StatsInfo()
+		}
+
+		if utils.ExistsStringInArray(text, []string{"!skill", "!sk"}) {
+			ctx.Skill.PlayerSkillInfo(player)
 		}
 	}
 }

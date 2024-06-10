@@ -19,6 +19,9 @@ O goblin vem correndo gritando, você se assusta com a zuada quando se da por si
 Quando o goblin pula em você, por reflexo você desvia e o goblin cai de cara no chão
 O goblin vem correndo e segura sua perna, pronto para lhe furar... mas voce consegue chutar ele para longe antes que ele consiga furar você.
 
+#NARRATION_DIE
+O goblin não suportou seus ataques, deu dois passos para trás e caiu ao chão morto.
+
 #HP
 4
 
@@ -27,6 +30,10 @@ O goblin vem correndo e segura sua perna, pronto para lhe furar... mas voce cons
 
 #STRENGTH
 d4
+
+#SKILLS
+001
+002
 
 ---------------------
 #NAME
@@ -47,6 +54,9 @@ O huki vem correndo gritando, você se assusta com a zuada quando se da por si, 
 Quando o huki pula em você, por reflexo você desvia e o huki cai de cara no chão
 O goblin vem correndo e segura sua perna, pronto para lhe furar... mas voce consegue chutar ele para longe antes que ele consiga furar você.
 
+#NARRATION_DIE
+O goblin não suportou seus ataques, deu dois passos para trás e caiu ao chão morto.
+
 #HP
 5
 
@@ -55,3 +65,6 @@ O goblin vem correndo e segura sua perna, pronto para lhe furar... mas voce cons
 
 #STRENGTH
 d4
+
+#SKILLS
+002

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Joeverson/numbria-game/model"
+	"github.com/Joeverson/numbria-game/types"
 	"github.com/Joeverson/numbria-game/utils"
 )
 
@@ -54,6 +55,20 @@ func (p *Player) move() {
 	}
 }
 
+func (p *Player) ReceiveSkill(ctx *Context, skillIndex string) {
+	p.Stats.Skills = append(p.Stats.Skills, ctx.Skill.GetSkill(skillIndex))
+}
+
+func (p *Player) Attack(skill *model.SkillModel) int {
+	if utils.TestPrecision(p.Stats.Accuracy) {
+		hankLevel := types.HankingTypeEnum.ToInt(skill.Hanking)
+
+		return utils.RollDice(utils.Dices.D4) + hankLevel
+	}
+
+	return 0
+}
+
 func (p *Player) Hit(damage int) {
 	p.Stats.HP -= damage
 
@@ -64,17 +79,25 @@ func (p *Player) Hit(damage int) {
 	}
 }
 
+func (p Player) IsDie() bool {
+	return p.Stats.HP <= 0
+}
+
 func (p *Player) Die() {
 	utils.SystemDialog("\t\t ================= YOU DIE ================ \n\n")
 	os.Exit(0)
 }
 
-func (p *Player) Attack() int {
-	if utils.TestPrecision(p.Stats.Accuracy) {
-		return utils.RollDice(p.Stats.Strength)
+func (p *Player) HasSkill(index string) (*model.SkillModel, bool) {
+	funded := utils.Find(p.Stats.Skills, func(curr *model.SkillModel) bool {
+		return strings.Compare(curr.Index, index) == 0
+	})
+
+	if funded != nil {
+		return funded, true
 	}
 
-	return 0
+	return funded, false
 }
 
 /* -------------------------------------------------------------------------- */
@@ -82,7 +105,7 @@ func (p *Player) Attack() int {
 /* -------------------------------------------------------------------------- */
 
 func (p Player) WhereIAm(ctx *Context, text string, answers []string) {
-	utils.NarrationDialog(utils.Random(answers), p.getPlaceName())
+	utils.NarrationDialog(fmt.Sprintf(utils.Random(answers), p.getPlaceName()))
 }
 
 func (p Player) WhatsThere(ctx *Context, text string, answers []string) {
@@ -101,6 +124,10 @@ func (p Player) WhatsThere(ctx *Context, text string, answers []string) {
 }
 
 func (p *Player) Walk(ctx *Context, text string, answers []string) {
+	if ctx.InEvent { // mesmo que fugir, sair andando quando um evento começar assim ignora-lo
+		ctx.InEvent = false
+	}
+
 	p.direction = utils.ExtractString(text, []string{"norte", "sul", "leste", "oeste"})
 
 	p.move()
@@ -112,7 +139,7 @@ func (p *Player) Walk(ctx *Context, text string, answers []string) {
 	}
 
 	ctx.Ambience.TalkAbout(p.getPlaceName())
-	utils.NarrationDialog(utils.Random(answers), p.direction)
+	utils.NarrationDialog(fmt.Sprintf(utils.Random(answers), p.direction))
 }
 
 /* -------------------------------------------------------------------------- */
@@ -129,7 +156,7 @@ func eventProcess(ctx *Context) bool {
 	if hasEvent {
 		ctx.InEvent = true
 		if event.IsCreature() {
-			creature := subEvent.(model.CreatureModel)
+			creature := subEvent.(*model.CreatureModel)
 
 			ctx.Creatures = append(ctx.Creatures, creature)
 			ctx.CurrentEvent = event
@@ -149,7 +176,13 @@ func (p Player) GetPositionInfo() {
 }
 
 func (p Player) StatsInfo() {
-	fmt.Printf("\n Hp: %d, Accuracy: %d \n\n", p.Stats.HP, p.Stats.Accuracy)
+	fmt.Printf("\n-------------------------- Stats ---------------------------\n\n")
+
+	hp := utils.TableItem("HP", 25) + utils.TableItem(fmt.Sprintf("%d", p.Stats.HP), 25)
+	accuracy := utils.TableItem("Accuracy", 25) + utils.TableItem(fmt.Sprintf("%d", p.Stats.Accuracy), 25)
+
+	fmt.Printf("%s\n%s\n", hp, accuracy)
+	fmt.Printf("\n-------------------------------------------------------------\n")
 }
 
 /* -------------------------------------------------------------------------- */
@@ -170,7 +203,7 @@ func (p *Player) Invoke(ctx *Context, funcName string, args ...interface{}) {
 		text := args[0].(string)
 		answers := args[1].([]string)
 
-		utils.NarrationDialog(answers[rand.IntN(len(answers))], text)
+		utils.NarrationDialog(fmt.Sprintf(answers[rand.IntN(len(answers))], text))
 		return
 	}
 

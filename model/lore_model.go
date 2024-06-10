@@ -5,5 +5,7 @@ type LoreModel struct {
 	Next          string
 	NextAutomatic bool
 	Index         string
+	Read          string
+	Save          string
 	System        string
 }

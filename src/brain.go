@@ -36,7 +36,7 @@ func amountOccurrences(originArr []string, targetArr []string) int {
 
 	for _, a := range originArr {
 		for _, b := range targetArr {
-			if strings.Compare(a, b) == 0 {
+			if strings.Compare(strings.ToLower(a), strings.ToLower(b)) == 0 {
 				occors++
 				break
 			}

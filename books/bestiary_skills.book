@@ -1,0 +1,34 @@
+__TYPE__:Bestiary
+
+---------------------------
+#INDEX
+001
+
+#NAME
+Corte Angular
+
+#DESCRIPTION
+Corte desferido por arma branca com um angulo de 45 graus
+
+#HANKING
+B
+
+#ENERGY_POINT
+2
+
+---------------------------------
+
+#INDEX
+002
+
+#NAME
+Chute
+
+#DESCRIPTION
+Chute ataque simples deferido com o pé
+
+#HANKING
+C
+
+#ENERGY_POINT
+5

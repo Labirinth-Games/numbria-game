@@ -4,10 +4,13 @@ import (
 	"github.com/Joeverson/numbria-game/utils"
 )
 
+const SKILL_BOOK = "./books/dictionaries/skills.dictionary"
+
 type PlayerModel struct {
 	Name     string
 	HP       int
 	Accuracy int
+	Skills   []*SkillModel
 	Strength utils.Dice
 	Level    int
 }

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"log"
 
+	"github.com/Joeverson/numbria-game/helper"
+	"github.com/Joeverson/numbria-game/model"
 	"github.com/Joeverson/numbria-game/utils"
 )
 
@@ -15,43 +17,58 @@ const (
 type StoryTelling struct {
 	Current string
 	Book    Book
-	Ctx     *Context
 }
 
-func (st StoryTelling) Execute() {
+func (st StoryTelling) GetCurrent() (model.LoreModel, bool) {
+	return st.Book.Lore.FindByIndex(st.Current)
+}
+
+func (st StoryTelling) GetLore(ctx *Context) model.LoreModel {
 	lore, ok := st.Book.Lore.FindByIndex(st.Current)
+
+	if ok && lore.Save != "" {
+		ctx.IsTypingSave = true
+	}
+
+	return lore
+}
+
+func (st *StoryTelling) Play(ctx Context) {
+	lore, ok := st.GetCurrent()
 
 	if !ok {
 		utils.SystemDialog("Não encontrei o chapter")
 	}
 
 	if len(lore.Content) > 0 {
-		utils.NarrationMultiplyDialog(lore.Content, DELAY_TO_SHOW_MESSAGE)
+		utils.NarrationMultiplyDialog(helper.TranslateMultiplyTextToStorageData(lore.Content, *ctx.Storage), DELAY_TO_SHOW_MESSAGE)
 	}
 
 	if lore.NextAutomatic {
-		st.Next()
+		st.AutomaticNext(ctx)
 	}
 
 	if lore.System != "" {
-		utils.SystemDialog(lore.System)
+		utils.SystemDialog(helper.TranslateTextToStorageData(lore.System, *ctx.Storage))
 	}
+
+	st.Current = lore.Next
 }
 
-func (st *StoryTelling) Next() error {
-	currentLore, ok := st.Book.Lore.FindByIndex(st.Current)
+func (st *StoryTelling) AutomaticNext(ctx Context) error {
+	currentLore, ok := st.GetCurrent()
 
 	if !ok {
 		log.Fatal(errors.New("CHAPTER NOT FOUND"))
 	}
 
 	st.Current = currentLore.Next
-	st.Execute()
+	st.Play(ctx)
 
 	return nil
 }
 
-func (st *StoryTelling) Goto(index string) {
+func (st *StoryTelling) Goto(index string, ctx Context) {
 	utils.SpaceBlank()
 
 	lore, ok := st.Book.Lore.FindByIndex(index)
@@ -61,5 +78,5 @@ func (st *StoryTelling) Goto(index string) {
 	}
 
 	st.Current = lore.Index
-	st.Execute()
+	st.Play(ctx)
 }

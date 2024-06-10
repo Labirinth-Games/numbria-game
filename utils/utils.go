@@ -69,3 +69,14 @@ func GetFirstToInt(key string, mapper map[string][]string) int {
 func IsProbable(percent float32) bool {
 	return rand.Float32() <= percent
 }
+
+func Find[T any](arr []T, cb func(current T) bool) (result T) {
+	for _, item := range arr {
+		if cb(item) {
+			result = item
+			return
+		}
+	}
+
+	return
+}

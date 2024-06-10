@@ -78,49 +78,63 @@ func (b *Battle) PlayerNarrationFail() string {
 /*                                Actions                                     */
 /* -------------------------------------------------------------------------- */
 
-func (b *Battle) EnemyAttack(ctx *Context) {
+func (b *Battle) EnemyAttack(ctx *Context, skill *model.SkillModel) bool {
 	creature := ctx.Creatures[0]
 	damage := creature.Attack()
 
 	if damage == 0 {
 		utils.NarrationDialog(utils.Random(creature.NarrationAttackFail))
-		return
+		return true
 	}
 
 	utils.NarrationDialog(utils.Random(creature.NarrationAttackSucess))
 	ctx.Player.Hit(damage)
+
+	return !ctx.Player.IsDie()
 }
 
-func (b *Battle) PlayerAttack(ctx *Context) {
-	damage := ctx.Player.Attack()
-	creature := ctx.Creatures[0]
-
-	if damage == 0 {
-		utils.NarrationDialog(b.PlayerNarrationFail(), creature.Name)
-		return
+func (b *Battle) PlayerAttack(ctx *Context, skill *model.SkillModel) bool {
+	if skill.RemainEnergyPoint <= 0 {
+		utils.SystemDialog("Você está cansado demais para usar essa habilidade.")
+		return true
 	}
 
-	utils.NarrationDialog(b.PlayerNarrationSucess(), creature.Name)
+	damage := ctx.Player.Attack(skill)
+	creature := ctx.Creatures[0]
+
+	skill.RemainEnergyPoint -= 1
+
+	if damage == 0 {
+		utils.NarrationDialog(fmt.Sprintf(b.PlayerNarrationFail(), creature.Name))
+		return true
+	}
+
+	utils.NarrationDialog(fmt.Sprintf(b.PlayerNarrationSucess(), creature.Name))
 	creature.Hit(damage)
+
+	return !creature.IsDie()
 }
 
-func (b *Battle) Combat(ctx *Context) {
+func (b *Battle) Combat(ctx *Context, skill *model.SkillModel) {
 	if !ctx.InBattle {
 		RollIniciative(ctx)
 		ctx.InBattle = true
 	}
 
-	var first, second func(*Context) = b.PlayerAttack, b.EnemyAttack
+	var first, second func(*Context, *model.SkillModel) bool = b.PlayerAttack, b.EnemyAttack
 
 	if ctx.IsIniciativeEnemy() {
 		first, second = second, first
 	}
 
-	first(ctx)
-	second(ctx)
+	if first(ctx, skill) {
+		second(ctx, skill)
+	}
 
 	if ctx.Creatures[0].IsDie() {
 		//TODO - drop item no futuro
+
+		utils.DisplaySession("Fim da Batalha")
 
 		ctx.InBattle = false
 		ctx.InEvent = false
@@ -132,7 +146,7 @@ func (b *Battle) Combat(ctx *Context) {
 /*                                Utils Dynamic                               */
 /* -------------------------------------------------------------------------- */
 
-func (e *Battle) Invoke(ctx *Context, funcName string, args ...interface{}) {
+func (e *Battle) Invoke(ctx *Context, funcName string, dictinonary model.Dictionary) {
 	if !ctx.InEvent {
 		utils.SystemDialog(utils.Random([]string{
 			"Não entendi o que voce quis fazer.",
@@ -141,6 +155,23 @@ func (e *Battle) Invoke(ctx *Context, funcName string, args ...interface{}) {
 		}))
 		return
 	}
+
+	if dictinonary.Index == "" {
+		utils.SystemDialog("Não entendi que habiliade é essa")
+		return
+	}
+
+	skill, ok := ctx.Player.HasSkill(dictinonary.Index)
+
+	if !ok {
+		utils.SystemDialog(utils.Random([]string{
+			"Você não conhece essa habilidade, voce precisa se dedicar mais nos estudos para poder usar-lá",
+			"Você não sabe fazer isso, é invendando coisas aleatorias que as pessoas morrem...",
+			"Que habilidade é essa? você não conhece",
+		}))
+		return
+	}
+
 	var ActionsMapper = map[string]interface{}{
 		"Combate": e.Combat,
 	}
@@ -151,5 +182,5 @@ func (e *Battle) Invoke(ctx *Context, funcName string, args ...interface{}) {
 		return
 	}
 
-	action.(func(ctx *Context))(ctx)
+	action.(func(ctx *Context, skill *model.SkillModel))(ctx, skill)
 }

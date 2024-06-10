@@ -16,6 +16,7 @@ const (
 	PLAYER_DICTIONARY = "./books/player.dictionary"
 	EVENT_DICTIONARY  = "./books/event.dictionary"
 	BATTLE_DICTIONARY = "./books/battle.dictionary"
+	SKILL_DICTIONARY  = "./books/dictionaries/skills.dictionary"
 )
 
 type Book struct {
@@ -23,6 +24,7 @@ type Book struct {
 	Battle     Battle
 	Ambience   Ambience
 	Event      Event
+	Skill      Skill
 	Dictionary []model.Dictionary
 }
 
@@ -31,12 +33,15 @@ func (book *Book) Load() {
 	book.Battle = NewBattle(utils.Interpreter(BATTLE_BOOK))
 	book.Ambience = NewAmbience(utils.Interpreter(AMBIENCE_BOOK))
 	book.Event = NewEvent(utils.Interpreter(EVENT_BOOK))
+	book.Skill = NewSkill(utils.Interpreter(SKILL_DICTIONARY))
 
 	book.Dictionary = SerializerDictionary([]utils.InterpreterConfig{
 		utils.Interpreter(PLAYER_DICTIONARY),
 		utils.Interpreter(EVENT_DICTIONARY),
 		utils.Interpreter(BATTLE_DICTIONARY),
 	})
+
+	book.Dictionary = append(book.Dictionary, book.Skill.SerializerDictionary(utils.Interpreter(SKILL_DICTIONARY))...)
 }
 
 func SerializerDictionary(interpreters []utils.InterpreterConfig) []model.Dictionary {

@@ -1,6 +1,7 @@
 package Numbria
 
 import (
+	"fmt"
 	"math/rand/v2"
 
 	"github.com/Joeverson/numbria-game/model"
@@ -41,10 +42,7 @@ func (e *Event) TryTriggerEvent() (event model.EventModel, element interface{}, 
 
 		switch event.EventTypeEnum {
 		case types.EventTypeEnum.Creature:
-			creature := model.CreatureModel{}
-			creature.Create()
-
-			element = creature
+			element = model.NewCreature()
 		}
 
 		utils.NarrationMultiplyDialog(event.Contents, DELAY_TO_SHOW_MESSAGE)
@@ -84,16 +82,20 @@ func (e *Event) observerAction(ctx *Context, text string, answers []string) {
 			// NOTE - Quando o jogador tenta observar mas n consegue o monstro dem 40% de chande de atacar
 			if utils.IsProbable(0.4) {
 				e.startEventAttack(ctx, "", []string{})
-				ctx.Battle.EnemyAttack(ctx)
+				ctx.Battle.EnemyAttack(ctx, nil)
 			}
 		}
 	}
 
 	// utils.SystemDialog(ctx.CurrentEvent.System)
-	ctx.InEvent = false
+	// ctx.InEvent = false
 }
 
 func (e *Event) startEventAttack(ctx *Context, text string, answers []string) {
+	if ctx.InBattle {
+		return
+	}
+
 	if !ctx.CurrentEvent.IsCreature() {
 		utils.SystemDialog(utils.Random([]string{
 			"Não tem ninguem para voce atacar.",
@@ -104,7 +106,8 @@ func (e *Event) startEventAttack(ctx *Context, text string, answers []string) {
 
 	ctx.InBattle = true
 
-	utils.DisplayInitBattle()
+	utils.DisplaySession("Iniciar Batalha")
+	RollIniciative(ctx)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -133,7 +136,7 @@ func (e *Event) Invoke(ctx *Context, funcName string, args ...interface{}) {
 		text := args[0].(string)
 		answers := args[1].([]string)
 
-		utils.NarrationDialog(answers[rand.IntN(len(answers))], text)
+		utils.NarrationDialog(fmt.Sprintf(answers[rand.IntN(len(answers))], text))
 		return
 	}
 

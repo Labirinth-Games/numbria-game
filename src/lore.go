@@ -15,6 +15,8 @@ func NewLore(paper utils.InterpreterConfig) Lore {
 	for _, item := range paper.Book {
 		lore.Models = append(lore.Models, model.LoreModel{
 			Content:       item["#CONTENT"],
+			Read:          utils.GetFirst("#READ", item),
+			Save:          utils.GetFirst("#SAVE", item),
 			Next:          utils.GetFirst("#NEXT", item),
 			NextAutomatic: utils.Exist("#NEXT_AUTOMATIC", item),
 			Index:         utils.GetFirst("#INDEX", item),

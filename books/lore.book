@@ -5,11 +5,19 @@ __TYPE__:Lore
 001
 
 #CONTENT
-Você é um mercenário que aceitou pegar o cantrato mais desafiante de todos onde ninguem na sua cidade sonhava em pegar
-Esse contrato era completamente desafiador e considerado por muitos uma sentença de morte!
-Mas destemido e cego pela montanha de ouro, fama e quantidade inimaginavel de espolios voce se jogou na missão.
+Era um dia qualquer, na cidade de `belomonte`. O sol ta brilhando e quente, seu estomago ronca.
+Ao colocar a mão no seu saco de dinheiro você observa que esta praticamente fazia e o que 
+tinha era exatamente sua ultima refeição.
+E não tem jeito vai ter que pegar logo um trabalho que de uma boa grana e não ter que se 
+preocupar por alguns meses.
 
-#NEXT_AUTOMATIC
+Você um mercenários, forte inteligente e sagas, caminha em direção ao quadro de avisos fora da guida de mercenários.
+
+#SYSTEM
+Qual seu nome mercenário?
+
+#SAVE
+name
 
 #NEXT
 002
@@ -19,10 +27,41 @@ Mas destemido e cego pela montanha de ouro, fama e quantidade inimaginavel de es
 002
 
 #CONTENT
-Voce está numa floresta, ansioso para poder conquistar seu premio logo se apressou em se aventurar.
+ok, <name> vamos tentar medir suas forças. 
 
 #SYSTEM
-O que voce faz?
+Voce possue 5 pontos para destribuir em HP, Precisão e Força. Escolha de forma sabia. (Ex: 1,4,0 ou 1,2,2)?
+
+#SAVE
+stats
 
 #NEXT
 003
+
+------------------
+#INDEX
+003
+
+#CONTENT
+<name> ve uma anuncio chamativo com um selo que com certeza garantiria um otima grana, que com certeza não precisaria mais pegar trabalhos por meses.
+Sem nem pensar, você arranca do quadro e começa a ler.
+
+        "Prezado mercenário, precisamos de urgencia nesse assunto! 
+         Temos informaçoes que um terrivel monstro está atuando nas 
+         sombras da floresta e é responsavel por mortes a civis na 
+         cidade e roubo de suprimentos nas fazendas ao redor, 
+         precisamos que `ELIMINE` o orc `Anuki` responsável por tais 
+         atrocidades.
+        
+                    `Recopensa: 5.000 moedas de ouro.`
+        
+         ass:. prefeito Hudson Clerk"
+
+Você fica abalado e desequilibrado com o valor imenso oferecido, certamente seriam 5 invernos sem pegar novos trabalhos.
+
+
+#SYSTEM
+o que você descide fazer, vai aceitar pegar o contrato?
+
+#NEXT
+004

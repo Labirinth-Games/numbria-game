@@ -108,6 +108,20 @@ mas se o atacado tiver o numero  maior igual o ataque tem falha, ou seja, ele co
 |Ataque (strength) | Quando a precisão tem sucesso é rolado o dado de força(strength) do atacante para saber quanto dano vai ser deferido, se o jogador tiver equipado com alguma arma, será acrecido o adicional da arma no dano deferido |
 | Vida (HP) | pontos de vida do jogador|
 
+### Habilidades
+o jogador durante a batalha ele deve declarar seu ataque, é uma luta declarativa. Cada ataque tem um level e cada level de ataque tem um adicional no dano. 
+
+As habilidades possuem hanking, e cada hanking influenciam na força da habilidade quando em conjunto com o 1d4 (rolagem padrão de habilidade), elas são:
+
+- Ataque fraco (C) - adicional de 0
+- Ataque medio (B) - adicional de 2
+- Ataque forte (A) - adicional de 6
+- Ataque super forte (S) - adicional de 8
+
+Ex: 1d4 + 2, é uma habilidade de hanking B
+
+o jogo calcula o dano da habilidade usando a metrica acima, e lembrando cada habilidade tem pontos de energia será usado durante a batalha, ou seja, quando uma habilidade tem apenas 1 ponto de energia quer dizer que ela pode ser usada apenas 1 vez durante a luta.
+
 ## Eventos de gameplay
 Durante o jogo podemos ter alguns eventos toda vez que o player se move pelo mundo tem a chance de um desses eventos acontecerem.
 
@@ -119,7 +133,9 @@ Durante o jogo podemos ter alguns eventos toda vez que o player se move pelo mun
 
 
 # WIKI
-Essa wiki é sobre a programação da historia do jogo e itens conhecidos como books, é um modelo experimental de programar açoes e historia do jogo sem necessáriamente manipular codigo
+Essa wiki é sobre a programação da historia do jogo e itens conhecidos como books, é um modelo experimental de programar açoes e historia do jogo sem necessáriamente manipular codigo.
+
+Obs:. Lembrando que o serealizador desses libros é baseado por linha, ou seja, ele entende cada linha de forma individual, caso esteja usando um comando certifique-se de que não está quebrando linha pois ele vai aparecer pela metade no dialogo.
 
 ## Estrutura
 um arquivo .book comeneça com o tipo do book, podemos ver a tag `__TYPE__` seguido do separador `:` e o valor que ele contem, usado para poder definir qual o dominio do libro, por exemplo podemos ver `__TYPE__:Lore`.
@@ -163,7 +179,10 @@ Quando adicionado é responsavel por valor na busca após o treinamento ou seja,
 
 #### `#OBSERVER_SUCESS`
 Usado como resposta quando o player encontra com a criatura e tenta descobrir quem é e ao rolar a iniciativa
-consegue ver, ou seja, a rolagem é favoravel ao player entao o dialog vai ser esse aqui
+consegue ver, ou seja, a rolagem é favoravel ao player entao o dialog vai ser esse aqui.
+
+#### `#NARRATION_ATTACK_SUCESS`
+São narrações referentes ao ataque bem sucedido do monstro, ou seja, narra quando o inimigo consegue lhe acertar o golpe, complementando a historia do combate, quanto mais detalhes e opçoes por linha melhor 
 
 ### Comandos no Eventos
 
