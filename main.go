@@ -46,7 +46,7 @@ func main() {
 	player.ReceiveSkill(&ctx, "002")
 
 	// init game
-	logo, ok := utils.ReadFileToString("./logo.txt")
+	logo, ok := utils.ReadFileToString("./arts/logo")
 	if ok {
 		fmt.Print(logo) // pegar od arquivo na riaz
 		time.Sleep(3 * time.Second)

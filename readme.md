@@ -38,7 +38,27 @@ Durante a gameplay precisamos definir alguns valores padrões referentes aos sta
 |  Stats    |dice | description |
 |--|--|--|
 | Accuracy  | N  | Precisão é usado como base para saber se o atacante consegue acertar ou não |
-| Strength  | d12 | Força aplicada que resultará em dano | 
+| Strength  | 1d4 | Força aplicada que resultará em dano, é rolado 1d4 + hank da habilidade | 
+
+## Player
+
+Segue as estatisticas base do jogador
+
+|  Stats  | description |
+|--|--|
+| HP        | 20 | 
+| Accuracy  | 1 |
+| Strength  | 1d4 |
+
+
+## Armas
+Quanto mais um jogador joga utilizando um tipo de arma ele vai subindo de level e liberando
+habilidades melhores da arma que está usando. Quando ele troca de arma sendo diferente do tipo que esta acostumado ele só vai poder usar as habilidades do nivel de pericia da arma
+
+Quando um jogador seleciona uma arma, ela faz parte de seus atributos assim aumentando precisao e força,
+numa batalha usando a arma o calculo é o seguinte:
+        
+        1d4 + força da arma + hank da skill usada no ataque
 
 ## Açoes do jogador
 o jogador consegue fazer algumas açoes como:
@@ -104,7 +124,7 @@ mas se o atacado tiver o numero  maior igual o ataque tem falha, ou seja, ele co
 ### Caracteristicas usadas no combate
 | Type | Description |
 |-|-|
-|Precisão (accuracy)| É rolado um dado de destreza(d8) caso o valor seja maior ou igual a destreza do alvo é considerado um acerto então pode rolar o dado de ataque.|
+|Precisão (accuracy)| É rolado um dado de destreza(1d8) caso o valor seja maior ou igual a destreza do alvo é considerado um acerto então pode rolar o dado de ataque.|
 |Ataque (strength) | Quando a precisão tem sucesso é rolado o dado de força(strength) do atacante para saber quanto dano vai ser deferido, se o jogador tiver equipado com alguma arma, será acrecido o adicional da arma no dano deferido |
 | Vida (HP) | pontos de vida do jogador|
 
